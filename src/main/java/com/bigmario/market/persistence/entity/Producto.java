@@ -17,7 +17,7 @@ public class Producto {
     @Column(name = "id_categoria")
     private Integer idCategoria;
 
-    @Column(name = "codigo_barrras")
+    @Column(name = "codigo_barras")
     private String codigoBarras;
 
     @Column(name = "precio_venta")
@@ -86,5 +86,13 @@ public class Producto {
 
     public void setEstado(Boolean estado) {
         this.estado = estado;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }
