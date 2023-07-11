@@ -39,8 +39,8 @@ public class ProductController {
         return productService.deleteProduct(productId);
     }
 
-    @GetMapping("/scarce")
-    public Optional<List<Product>> getScarseProducts(int quantity){
+    @GetMapping("/scarce/{quantity}")
+    public Optional<List<Product>> getScarseProducts(@PathVariable("quantity") int quantity){
         return productService.getScarseProducts(quantity);
     }
 }
