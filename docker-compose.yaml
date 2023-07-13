@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - main-network
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    env_file:
+      - .env
+    restart: always
+
+  dev:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/home/gradle/src
+    ports:
+      - 8090:8090
+    networks:
+      - main-network
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    command: ["java", "-jar", "-Dspring.profiles.active=dev", "/opt/app.jar"]
+
+  prod:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: production
+    volumes:
+      - .:/home/gradle/src
+    env_file:
+      - .env
+    command: ["java", "-jar", "-Dspring.profiles.active=pdn", "/opt/app.jar"]
+    ports:
+      - 8080:8080
+    networks:
+      - main-network
+    depends_on:
+      - postgres
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  main-network:
